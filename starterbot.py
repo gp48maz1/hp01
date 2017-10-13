@@ -33,7 +33,6 @@ def handle_command(command, channel):
         if entity is None:
             response = "Stop being a muggle"
 
-        '''
         words = command.split()
         for word in words:
             check = word
@@ -43,10 +42,6 @@ def handle_command(command, channel):
                 response = "I went there!"
             elif word == 'hermoine':
                 response = "That is my best friend! Maybe even more than my best friend..."
-            else:
-                response = "Sure...write some more code then I can do that!"
-            response += check
-        '''
 
     slack_client.api_call("chat.postMessage", channel=channel,
                           text=response, as_user=True)
