@@ -1,6 +1,7 @@
 import os
 import time
 from slackclient import SlackClient
+from utils import wit_response
 
 # starterbot's ID as an environment variable
 BOT_ID = os.environ.get("BOT_ID")
@@ -19,6 +20,20 @@ def handle_command(command, channel):
     response = "Not sure what you mean. Use the *" + EXAMPLE_COMMAND + \
                "* command with numbers, delimited by spaces."
     if command.startswith(EXAMPLE_COMMAND):
+
+        response = None
+
+        entity, value = wit_response(command)
+
+        if entity == 'class_type':
+            response = "Oh I love {}!".format(str(value))
+        elif entity == 'house_type':
+            response = "Oh {}, I love them!".format(str(value))
+
+        if entity is None:
+            response = "Stop being a muggle"
+
+        '''
         words = command.split()
         for word in words:
             check = word
@@ -31,6 +46,8 @@ def handle_command(command, channel):
             else:
                 response = "Sure...write some more code then I can do that!"
             response += check
+        '''
+
     slack_client.api_call("chat.postMessage", channel=channel,
                           text=response, as_user=True)
 
