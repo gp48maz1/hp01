@@ -43,6 +43,8 @@ def handle_command(command, channel):
             elif word == 'hermoine':
                 response = "That is my best friend! Maybe even more than my best friend..."
 
+        response = entity + value
+
     slack_client.api_call("chat.postMessage", channel=channel,
                           text=response, as_user=True)
 
