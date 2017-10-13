@@ -9,6 +9,7 @@ BOT_ID = os.environ.get("BOT_ID")
 AT_BOT = "<@" + BOT_ID + ">"
 EXAMPLE_COMMAND = "do"
 
+
 def handle_command(command, channel):
     """
         Receives commands directed at the bot and determines if they
@@ -18,7 +19,18 @@ def handle_command(command, channel):
     response = "Not sure what you mean. Use the *" + EXAMPLE_COMMAND + \
                "* command with numbers, delimited by spaces."
     if command.startswith(EXAMPLE_COMMAND):
-        response = "Sure...write some more code then I can do that!"
+        words = command.split()
+        for word in words:
+            check = word
+            if word == 'cool':
+                response ="Niceeeeee"
+            elif word == 'hogwarts':
+                response = "I went there!"
+            elif word == 'hermoine':
+                response = "That is my best friend! Maybe even more than my best friend..."
+            else:
+                response = "Sure...write some more code then I can do that!"
+            response += check
     slack_client.api_call("chat.postMessage", channel=channel,
                           text=response, as_user=True)
 
@@ -37,7 +49,6 @@ def parse_slack_output(slack_rtm_output):
                 return output['text'].split(AT_BOT)[1].strip().lower(), \
                        output['channel']
     return None, None
-
 
 
 # instantiate Slack & Twilio clients
