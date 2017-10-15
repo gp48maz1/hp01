@@ -19,6 +19,11 @@ def handle_command(command, channel):
     """
     response = "Not sure what you mean. Use the *" + EXAMPLE_COMMAND + \
                "* command with numbers, delimited by spaces."
+
+    if command.startswith(AT_BOT):
+        general_text = command.split(AT_BOT)[1].strip().lower()
+        response = general_text
+    '''''
     if command.startswith(EXAMPLE_COMMAND):
 
         response = None
@@ -44,6 +49,7 @@ def handle_command(command, channel):
                 response = "That is my best friend! Maybe even more than my best friend..."
 
         response = entity + value
+    '''''
 
     slack_client.api_call("chat.postMessage", channel=channel,
                           text=response, as_user=True)
@@ -60,7 +66,8 @@ def parse_slack_output(slack_rtm_output):
         for output in output_list:
             if output and 'text' in output and AT_BOT in output['text']:
                 # return text after the @ mention, whitespace removed
-                return output['text'].split(AT_BOT)[1].strip().lower(), \
+                # return output['text'].split(AT_BOT)[1].strip().lower(),
+                return output['text'], \
                        output['channel']
     return None, None
 
