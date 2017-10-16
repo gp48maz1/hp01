@@ -4,11 +4,20 @@ from slackclient import SlackClient
 from utils import wit_response
 
 # starterbot's ID as an environment variable
+BOT_ID_PETUNIA = os.environ.get("BOT_ID_PETUNIA")
 BOT_ID_DUDLEY = os.environ.get("BOT_ID_DUDLEY")
+BOT_ID = os.environ.get("BOT_ID")
 
 # constants
 AT_BOT = "<@" + BOT_ID_DUDLEY + ">"
+AT_HP = "<@" + BOT_ID + ">"
+AT_PETUNIA = "<@" + BOT_ID_PETUNIA + ">"
+
+# rails
 EXAMPLE_COMMAND = "do"
+QUESTION_1 = "dudders when was the last time you received a hair cut?"
+QUESTION_2 = "oh sweetums, i know you don't want to go, but we'll get harry to " \
+             "schedule it."
 
 
 def handle_command(command, channel):
@@ -22,7 +31,12 @@ def handle_command(command, channel):
 
     if command.startswith(AT_BOT):
         general_text = command.split(AT_BOT)[1].strip().lower()
-        response = "LAME" + general_text
+
+        if general_text == QUESTION_1:
+            response = AT_PETUNIA + "Mom stop it I'm watching the Tele!"
+
+        if general_text == QUESTION_2:
+            response = AT_PETUNIA + "Fine... Mother... but only because Harry is scheduling it!"
     '''''
     if command.startswith(EXAMPLE_COMMAND):
 

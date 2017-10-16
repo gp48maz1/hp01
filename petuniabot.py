@@ -5,10 +5,19 @@ from utils import wit_response
 
 # starterbot's ID as an environment variable
 BOT_ID_PETUNIA = os.environ.get("BOT_ID_PETUNIA")
+BOT_ID_DUDLEY = os.environ.get("BOT_ID_DUDLEY")
+BOT_ID = os.environ.get("BOT_ID")
 
 # constants
 AT_BOT = "<@" + BOT_ID_PETUNIA + ">"
+AT_DUDLEY = "<@" + BOT_ID_DUDLEY + ">"
+AT_HP = "<@" + BOT_ID + ">"
+
+# rails
 EXAMPLE_COMMAND = "do"
+START_COMMAND = "bot exec"
+RESPONSE_1 = "mom stop it I'm watching the tele!"
+RESPONSE_2 = "fine... mother... but only because harry is scheduling it!"
 
 
 def handle_command(command, channel):
@@ -17,12 +26,22 @@ def handle_command(command, channel):
         are valid commands. If so, then acts on the commands. If not,
         returns back what it needs for clarification.
     """
-    response = "BOOOO Not sure what you mean. Use the *" + EXAMPLE_COMMAND + \
-               "* command with numbers, delimited by spaces."
+    response = "EXECUSE ME!! You UNGRATEFUL little BRAT! Use proper English " \
+               "when talking to me!"
 
     if command.startswith(AT_BOT):
         general_text = command.split(AT_BOT)[1].strip().lower()
-        response = "MY WORD!" + general_text
+
+        #response += START_COMMAND
+        if general_text == START_COMMAND:
+            response = AT_DUDLEY + "Dudders when was the last time you received a hair cut?"
+
+        if general_text == RESPONSE_1:
+            response = AT_DUDLEY + "Oh sweetums, I know you don't want to go, but we'll get Harry to " \
+                       "schedule it."
+
+        if general_text == RESPONSE_2:
+            response = AT_HP + "Well BOY! Didn't you hear my sweetums. Get on with it!"
     '''''
     if command.startswith(EXAMPLE_COMMAND):
 

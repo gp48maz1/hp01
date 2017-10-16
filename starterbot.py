@@ -4,10 +4,14 @@ from slackclient import SlackClient
 from utils import wit_response
 
 # starterbot's ID as an environment variable
+BOT_ID_PETUNIA = os.environ.get("BOT_ID_PETUNIA")
+BOT_ID_DUDLEY = os.environ.get("BOT_ID_DUDLEY")
 BOT_ID = os.environ.get("BOT_ID")
 
 # constants
 AT_BOT = "<@" + BOT_ID + ">"
+AT_PETUNIA = "<@" + BOT_ID_PETUNIA + ">"
+AT_DUDLEY = "<@" + BOT_ID_DUDLEY + ">"
 EXAMPLE_COMMAND = "do"
 
 
