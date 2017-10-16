@@ -51,7 +51,7 @@ def handle_command(command, channel):
         response = entity + value
     '''''
 
-    slack_client.api_call("chat.postMessage", channel=channel,
+    slack_client_dudley.api_call("chat.postMessage", channel=channel,
                           text=response, as_user=True)
 
 
@@ -73,14 +73,14 @@ def parse_slack_output(slack_rtm_output):
 
 
 # instantiate Slack & Twilio clients
-slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN_DUDLEY'))
+slack_client_dudley = SlackClient(os.environ.get('SLACK_BOT_TOKEN_DUDLEY'))
 
 if __name__ == "__main__":
     READ_WEBSOCKET_DELAY = 1 # 1 second delay between reading from firehose
-    if slack_client.rtm_connect():
-        print("StarterBot connected and running!")
+    if slack_client_dudley.rtm_connect():
+        print("Dudley Bot connected and running!")
         while True:
-            command, channel = parse_slack_output(slack_client.rtm_read())
+            command, channel = parse_slack_output(slack_client_dudley.rtm_read())
             if command and channel:
                 handle_command(command, channel)
             time.sleep(READ_WEBSOCKET_DELAY)
