@@ -19,6 +19,8 @@ QUESTION_1 = "dudders when was the last time you received a hair cut?"
 QUESTION_2 = "oh sweetums, i know you don't want to go, but we'll get harry to " \
              "schedule it."
 
+#random
+READ_DELAY = 2
 
 def handle_command(command, channel):
     """
@@ -36,10 +38,12 @@ def handle_command(command, channel):
 
         if general_text == QUESTION_1:
             response = AT_PETUNIA + "Mom stop it I'm watching the Tele!"
+            time.sleep(READ_DELAY)
             check = True
 
         if general_text == QUESTION_2:
             response = AT_PETUNIA + "Fine... Mother... but only because Harry is scheduling it!"
+            time.sleep(READ_DELAY)
             check = True
 
         ##########
@@ -53,18 +57,23 @@ def handle_command(command, channel):
 
             if entity == 'intent' and value == 'insult':
                 response = "Shut Up Potter, you are a {}!".format(str(value))
+                time.sleep(READ_DELAY)
             elif entity == 'intent' and value == 'threaten_with_magic':
                 response = AT_PETUNIA + "Are you talking about magic?! Mummy! Mummy! Harry is " \
                                         "talking about {}!".format(str(value))
+                time.sleep(READ_DELAY)
             #Can remove this dupe when i have dictionaries
             elif entity == 'object_attacking_with':
                 response = AT_PETUNIA + "Are you talking about magic?! Mummy! Mummy! Harry is " \
                                         "talking about {}!".format(str(value))
+                time.sleep(READ_DELAY)
             elif entity == 'object_of_insult':
                 response = "Shut Up Potter, you are a {}!".format(str(value))
+                time.sleep(READ_DELAY)
 
             if entity is None:
                 response = "Harry you are A BIG STUPID IDIOT!!!!"
+                time.sleep(READ_DELAY)
 
         '''''
         words = command.split()

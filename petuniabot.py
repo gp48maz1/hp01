@@ -19,6 +19,9 @@ START_COMMAND = "bot exec"
 RESPONSE_1 = "mom stop it i'm watching the tele!"
 RESPONSE_2 = "fine... mother... but only because harry is scheduling it!"
 
+#random
+READ_DELAY = 2
+
 
 def handle_command(command, channel):
     """
@@ -36,15 +39,18 @@ def handle_command(command, channel):
         #response += START_COMMAND
         if general_text == START_COMMAND:
             response = AT_DUDLEY + "Dudders when was the last time you received a hair cut?"
+            time.sleep(READ_DELAY)
             check = True
 
         if general_text == RESPONSE_1:
             response = AT_DUDLEY + "Oh sweetums, I know you don't want to go, but we'll get Harry to " \
                        "schedule it."
+            time.sleep(READ_DELAY)
             check = True
 
         if general_text == RESPONSE_2:
             response = AT_HP + "Well...Boy, were you listening?! BOY! Didn't you hear my sweetums. Get on with it!"
+            time.sleep(READ_DELAY)
             check = True
 
         ##########
@@ -58,13 +64,17 @@ def handle_command(command, channel):
 
             if entity == 'intent' and value == 'dudley_is_scared':
                 response = "NOT IN THIS HOUSE POTTER!!!"
+                time.sleep(READ_DELAY)
             elif entity == 'object_of_fear':
-                response = "{}?! Not in this household POTTER!".format(str(value))
+                response = "Did you say {}?! Not in this household POTTER!".format(str(value))
+                time.sleep(READ_DELAY)
             elif entity == 'object_of_protection':
                 response = "Don't worry Dudders {} is here. POTTER! GET OUT NOW!".format(str(value))
+                time.sleep(READ_DELAY)
 
             if entity is None:
                 response = "Harry go to CUPBOARD UNDER THE STAIRS NOW!!!"
+                time.sleep(READ_DELAY)
 
     slack_client_petunia.api_call("chat.postMessage", channel=channel,
                           text=response, as_user=True)

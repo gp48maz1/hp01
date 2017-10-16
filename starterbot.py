@@ -26,7 +26,7 @@ def handle_command(command, channel):
 
     if command.startswith(AT_BOT):
         general_text = command.split(AT_BOT)[1].strip().lower()
-        response = general_text
+        response = "Yes... I heard you Aunt Petunia..."
     '''''
     if command.startswith(EXAMPLE_COMMAND):
 
