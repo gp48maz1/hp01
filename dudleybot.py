@@ -17,12 +17,12 @@ def handle_command(command, channel):
         are valid commands. If so, then acts on the commands. If not,
         returns back what it needs for clarification.
     """
-    response = "Not sure what you mean. Use the *" + EXAMPLE_COMMAND + \
+    response = "BOOOO Not sure what you mean. Use the *" + EXAMPLE_COMMAND + \
                "* command with numbers, delimited by spaces."
 
     if command.startswith(AT_BOT):
         general_text = command.split(AT_BOT)[1].strip().lower()
-        response = general_text
+        response = "LAME" + general_text
     '''''
     if command.startswith(EXAMPLE_COMMAND):
 
