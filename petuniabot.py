@@ -1,7 +1,7 @@
 import os
 import time
 from slackclient import SlackClient
-from utils import wit_response
+from utils import wit_response, wit_petunia_response
 
 # starterbot's ID as an environment variable
 BOT_ID_PETUNIA = os.environ.get("BOT_ID_PETUNIA")
@@ -30,45 +30,41 @@ def handle_command(command, channel):
                "when talking to me!"
 
     if command.startswith(AT_BOT):
+        check = False
         general_text = command.split(AT_BOT)[1].strip().lower()
 
         #response += START_COMMAND
         if general_text == START_COMMAND:
             response = AT_DUDLEY + "Dudders when was the last time you received a hair cut?"
+            check = True
 
         if general_text == RESPONSE_1:
             response = AT_DUDLEY + "Oh sweetums, I know you don't want to go, but we'll get Harry to " \
                        "schedule it."
+            check = True
 
         if general_text == RESPONSE_2:
             response = AT_HP + "Well...Boy, were you listening?! BOY! Didn't you hear my sweetums. Get on with it!"
-    '''''
-    if command.startswith(EXAMPLE_COMMAND):
+            check = True
 
-        response = None
+        ##########
+        # WIT.AI #
+        ##########
+        if not check:
 
-        entity, value = wit_response(command)
+            entity, value = wit_petunia_response(command)
 
-        if entity == 'class_type':
-            response = "Oh I love {}!".format(str(value))
-        elif entity == 'house_type':
-            response = "Oh {}, I love them!".format(str(value))
+            response = "BOO" + entity + " " + value
 
-        if entity is None:
-            response = "Stop being a muggle"
+            if entity == 'intent' and value == 'dudley_is_scared':
+                response = "NOT IN THIS HOUSE POTTER!!!"
+            elif entity == 'object_of_fear':
+                response = "{}?! Not in this household POTTER!".format(str(value))
+            elif entity == 'object_of_protection':
+                response = "Don't worry Dudders {} is here. POTTER! GET OUT NOW!".format(str(value))
 
-        words = command.split()
-        for word in words:
-            check = word
-            if word == 'cool':
-                response ="Niceeeeee"
-            elif word == 'hogwarts':
-                response = "I went there!"
-            elif word == 'hermoine':
-                response = "That is my best friend! Maybe even more than my best friend..."
-
-        response = entity + value
-    '''''
+            if entity is None:
+                response = "Harry go to CUPBOARD UNDER THE STAIRS NOW!!!"
 
     slack_client_petunia.api_call("chat.postMessage", channel=channel,
                           text=response, as_user=True)
