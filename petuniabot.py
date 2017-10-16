@@ -5,8 +5,8 @@ from utils import wit_response
 
 # starterbot's ID as an environment variable
 BOT_ID_PETUNIA = os.environ.get("BOT_ID_PETUNIA")
-BOT_ID_DUDLEY = os.environ.get("BOT_ID_DUDLEY")
-BOT_ID = os.environ.get("BOT_ID")
+BOT_ID_DUDLEY = 'U7JL8RLEQ'
+BOT_ID = 'U7HQ4QJR2'
 
 # constants
 AT_BOT = "<@" + BOT_ID_PETUNIA + ">"
@@ -16,7 +16,7 @@ AT_HP = "<@" + BOT_ID + ">"
 # rails
 EXAMPLE_COMMAND = "do"
 START_COMMAND = "bot exec"
-RESPONSE_1 = "mom stop it I'm watching the tele!"
+RESPONSE_1 = "mom stop it i'm watching the tele!"
 RESPONSE_2 = "fine... mother... but only because harry is scheduling it!"
 
 
@@ -41,7 +41,7 @@ def handle_command(command, channel):
                        "schedule it."
 
         if general_text == RESPONSE_2:
-            response = AT_HP + "Well BOY! Didn't you hear my sweetums. Get on with it!"
+            response = AT_HP + "Well...Boy, were you listening?! BOY! Didn't you hear my sweetums. Get on with it!"
     '''''
     if command.startswith(EXAMPLE_COMMAND):
 

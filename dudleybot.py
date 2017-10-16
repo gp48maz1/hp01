@@ -1,12 +1,12 @@
 import os
 import time
 from slackclient import SlackClient
-from utils import wit_response
+from utils import wit_response, wit_dudley_response
 
 # starterbot's ID as an environment variable
-BOT_ID_PETUNIA = os.environ.get("BOT_ID_PETUNIA")
+BOT_ID_PETUNIA = 'U7JK660E6'
 BOT_ID_DUDLEY = os.environ.get("BOT_ID_DUDLEY")
-BOT_ID = os.environ.get("BOT_ID")
+BOT_ID = 'U7HQ4QJR2'
 
 # constants
 AT_BOT = "<@" + BOT_ID_DUDLEY + ">"
@@ -29,29 +29,44 @@ def handle_command(command, channel):
     response = "BOOOO Not sure what you mean. Use the *" + EXAMPLE_COMMAND + \
                "* command with numbers, delimited by spaces."
 
+    ##### NEEED TO FIX THE TRUE FALSE TAGS BAD STRUCTURE###
     if command.startswith(AT_BOT):
+        check = False
         general_text = command.split(AT_BOT)[1].strip().lower()
 
         if general_text == QUESTION_1:
             response = AT_PETUNIA + "Mom stop it I'm watching the Tele!"
+            check = True
 
         if general_text == QUESTION_2:
             response = AT_PETUNIA + "Fine... Mother... but only because Harry is scheduling it!"
-    '''''
-    if command.startswith(EXAMPLE_COMMAND):
+            check = True
 
-        response = None
+        ##########
+        # WIT.AI #
+        ##########
+        if not check:
 
-        entity, value = wit_response(command)
+            entity, value = wit_dudley_response(command)
 
-        if entity == 'class_type':
-            response = "Oh I love {}!".format(str(value))
-        elif entity == 'house_type':
-            response = "Oh {}, I love them!".format(str(value))
+            response = "WOO" + entity + " " + value
 
-        if entity is None:
-            response = "Stop being a muggle"
+            if entity == 'intent' and value == 'insult':
+                response = "Shut Up Potter, you are a {}!".format(str(value))
+            elif entity == 'intent' and value == 'threaten_with_magic':
+                response = AT_PETUNIA + "Are you talking about magic?! Mummy! Mummy! Harry is " \
+                                        "talking about {}!".format(str(value))
+            #Can remove this dupe when i have dictionaries
+            elif entity == 'object_attacking_with':
+                response = AT_PETUNIA + "Are you talking about magic?! Mummy! Mummy! Harry is " \
+                                        "talking about {}!".format(str(value))
+            elif entity == 'object_of_insult':
+                response = "Shut Up Potter, you are a {}!".format(str(value))
 
+            if entity is None:
+                response = "Harry you are A BIG STUPID IDIOT!!!!"
+
+        '''''
         words = command.split()
         for word in words:
             check = word
