@@ -73,7 +73,7 @@ def parse_slack_output(slack_rtm_output):
 
 
 # instantiate Slack & Twilio clients
-slack_client_petunia = SlackClient(os.environ.get('SLACK_BOT_TOKEN_DUDLEY'))
+slack_client_petunia = SlackClient(os.environ.get('SLACK_BOT_TOKEN_PETUNIA'))
 
 if __name__ == "__main__":
     READ_WEBSOCKET_DELAY = 1 # 1 second delay between reading from firehose
