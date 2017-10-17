@@ -71,10 +71,15 @@ def handle_command(command, channel):
                             response = "Shut Up {}, you are a {}!".format(
                                 str(response_wit_parsed['object_of_insult'][0]), str(response_wit_parsed['object_of_insult'][2]))
 
-
-
                 #Second, the other option for intent
                 elif response_wit_parsed['intent'] == ['threaten_with_magic']:
+                    #If Wit was able to pick up an object
+                    if 'object_attacking_with' in response_wit_parsed:
+                        response = AT_PETUNIA + "Are you talking about magic?! Mummy! Mummy! Harry is " \
+                                            "talking about {}!".format(str(response_wit_parsed['object_attacking_with']))
+                    else:
+                        response = AT_PETUNIA + "Are you talking about magic?! Mummy! Mummy! Harry is " \
+                                                "talking about SCARY magic!"
             else:
                 response = "Harry you are A BIG STUPID IDIOT!!!!"
                 time.sleep(READ_DELAY)
