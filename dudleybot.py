@@ -76,10 +76,18 @@ def handle_command(command, channel):
                     #If Wit was able to pick up an object
                     if 'object_attacking_with' in response_wit_parsed:
                         response = AT_PETUNIA + "Are you talking about magic?! Mummy! Mummy! Harry is " \
-                                            "talking about {}!".format(str(response_wit_parsed['object_attacking_with']))
+                                            "talking about {}!".format(str(response_wit_parsed['object_attacking_with'][0]))
                     else:
                         response = AT_PETUNIA + "Are you talking about magic?! Mummy! Mummy! Harry is " \
                                                 "talking about SCARY magic!"
+                #Third, the other option for intent
+                elif response_wit_parsed['intent'] == ['attack_with_magic']:
+                    #If Wit was able to pick up an object
+                    how_many_spells = len(response_wit_parsed['spell_attacking_with'])
+                    if how_many_spells >= 1:
+                        response = "AHHHHH!!!"
+                    else:
+                        response = AT_PETUNIA + "AHHHHHH Mummy! Mummy! Harry is using magic!"
             else:
                 response = "Harry you are A BIG STUPID IDIOT!!!!"
                 time.sleep(READ_DELAY)
