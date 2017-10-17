@@ -28,8 +28,7 @@ def handle_command(command, channel):
         are valid commands. If so, then acts on the commands. If not,
         returns back what it needs for clarification.
     """
-    response = "BOOOO Not sure what you mean. Use the *" + EXAMPLE_COMMAND + \
-               "* command with numbers, delimited by spaces."
+    response = "HAHAHA Potter doesn't even know how to speak English good! Potter more like... NOT SMART!"
 
     ##### NEEED TO FIX THE TRUE FALSE TAGS BAD STRUCTURE###
     if command.startswith(AT_BOT):
@@ -80,14 +79,18 @@ def handle_command(command, channel):
                     else:
                         response = AT_PETUNIA + "Are you talking about magic?! Mummy! Mummy! Harry is " \
                                                 "talking about SCARY magic!"
+
                 #Third, the other option for intent
                 elif response_wit_parsed['intent'] == ['attack_with_magic']:
                     #If Wit was able to pick up an object
-                    how_many_spells = len(response_wit_parsed['spell_attacking_with'])
-                    if how_many_spells >= 1:
-                        response = "AHHHHH!!!"
+                    if 'spell_attacking_with' in response_wit_parsed:
+                        how_many_spells = len(response_wit_parsed['spell_attacking_with'])
+                        if how_many_spells > 1:
+                            response = "AHHHHH!!!"
+                        else:
+                            response = AT_PETUNIA + "AHHHHHH Mummy! Mummy! Harry is using magic!"
                     else:
-                        response = AT_PETUNIA + "AHHHHHH Mummy! Mummy! Harry is using magic!"
+                        response = AT_PETUNIA + "AHHHHHH Mummy! Mummy! Harry is PROBABLY usinging magic!"
             else:
                 response = "Harry you are A BIG STUPID IDIOT!!!!"
                 time.sleep(READ_DELAY)
