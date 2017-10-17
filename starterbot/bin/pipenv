@@ -1,0 +1,10 @@
+#!/Users/GaryPeters/Documents/CMU-SV-2017-2018/SEM/starterbot/starterbot/bin/python2.7
+# EASY-INSTALL-ENTRY-SCRIPT: 'pipenv==8.2.7','console_scripts','pipenv'
+__requires__ = 'pipenv==8.2.7'
+import sys
+from pkg_resources import load_entry_point
+
+if __name__ == '__main__':
+    sys.exit(
+        load_entry_point('pipenv==8.2.7', 'console_scripts', 'pipenv')()
+    )

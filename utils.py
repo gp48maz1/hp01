@@ -25,15 +25,20 @@ def wit_response(message_text):
 def wit_dudley_response(message_text):
     resp = client_dudley.message(message_text)
     print(resp)
-    entity = None
-    value = None
+
+    response_wit_parsed = {}
 
     try:
-        entity = list(resp['entities'])[0]
-        value = resp['entities'][entity][0]['value']
+        for x in resp['entities']:
+            for y in resp['entities'][x]:
+                if x in response_wit_parsed:
+                    response_wit_parsed[x].append(y['value'])
+                else:
+                    response_wit_parsed[x] = [y['value']]
     except:
+        print('Something definitely is broken...')
         pass
-    return(entity, value)
+    return response_wit_parsed
 
 def wit_petunia_response(message_text):
     resp = client_petunia.message(message_text)

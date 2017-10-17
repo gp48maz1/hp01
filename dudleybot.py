@@ -51,10 +51,39 @@ def handle_command(command, channel):
         ##########
         if not check:
 
-            entity, value = wit_dudley_response(command)
+            response_wit_parsed = wit_dudley_response(command)
 
-            response = "WOO" + entity + " " + value
+            #First checking to see if Wit picked up an intent
+            if 'intent' in response_wit_parsed:
+                #Second, since it picked up an intent it needs to see wht it is
+                if response_wit_parsed['intent'] == ['insult']:
+                    #Third, I need to see if the intent has an object or sub section
+                    if 'object_of_insult' in response_wit_parsed:
+                        #counting how many objects in sub section
+                        how_many_insults = len(response_wit_parsed['object_of_insult'])
+                        if how_many_insults == 1:
+                            response = "Shut Up Potter, you are a {}!".format(
+                                str(response_wit_parsed['object_of_insult'][0]))
+                        if how_many_insults == 2:
+                            response = "Shut Up Potter, you are a {} and a {}!".format(
+                                str(response_wit_parsed['object_of_insult'][0]),str(response_wit_parsed['object_of_insult'][1]))
+                        if how_many_insults >= 3:
+                            response = "Shut Up {}, you are a {}!".format(
+                                str(response_wit_parsed['object_of_insult'][0]), str(response_wit_parsed['object_of_insult'][2]))
 
+
+
+                #Second, the other option for intent
+                elif response_wit_parsed['intent'] == ['threaten_with_magic']:
+            else:
+                response = "Harry you are A BIG STUPID IDIOT!!!!"
+                time.sleep(READ_DELAY)
+
+
+            ######################################
+            # Need to Redo all the logic here... #
+            ######################################
+            '''''
             if entity == 'intent' and value == 'insult':
                 response = "Shut Up Potter, you are a {}!".format(str(value))
                 time.sleep(READ_DELAY)
@@ -75,7 +104,7 @@ def handle_command(command, channel):
                 response = "Harry you are A BIG STUPID IDIOT!!!!"
                 time.sleep(READ_DELAY)
 
-        '''''
+
         words = command.split()
         for word in words:
             check = word
@@ -87,7 +116,7 @@ def handle_command(command, channel):
                 response = "That is my best friend! Maybe even more than my best friend..."
 
         response = entity + value
-    '''''
+        '''''
 
     slack_client_dudley.api_call("chat.postMessage", channel=channel,
                           text=response, as_user=True)
