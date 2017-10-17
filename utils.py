@@ -24,6 +24,7 @@ def wit_response(message_text):
 
 def wit_dudley_response(message_text):
     resp = client_dudley.message(message_text)
+    print(resp)
     entity = None
     value = None
 
