@@ -69,6 +69,8 @@ def handle_command(command, channel):
                         if how_many_insults >= 3:
                             response = "Shut Up {}, you are a {}!".format(
                                 str(response_wit_parsed['object_of_insult'][0]), str(response_wit_parsed['object_of_insult'][2]))
+                    else:
+                        response = "Shut Up POTTER, you don't even know how to make a good insult!"
 
                 #Second, the other option for intent
                 elif response_wit_parsed['intent'] == ['threaten_with_magic']:
