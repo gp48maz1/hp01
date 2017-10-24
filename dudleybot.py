@@ -20,7 +20,7 @@ QUESTION_2 = "oh sweetums, i know you don't want to go, but we'll get harry to "
              "schedule it."
 
 QUESTION_3 = "what? how dare you?! who told you -- dudders close your ears! i don't want you to hear anything about " \
-               "this science nonesense. just go back to watching the tele... wait just one moment... sweetums... what" \
+               "this science nonsense. just go back to watching the tele... wait just one moment... sweetums... what" \
                "are you watching on the tele?"
 
 STATEMENT_3 = "Mom stop talking I'm watching the Tele, Trump is on! He is firing people on The Apprentice!"
@@ -51,6 +51,7 @@ def handle_command(command, channel):
             time.sleep(READ_DELAY)
             check = True
 
+        print(general_text)
         if general_text == QUESTION_3:
             response = AT_PETUNIA + STATEMENT_3
             time.sleep(READ_DELAY)

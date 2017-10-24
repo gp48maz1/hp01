@@ -25,7 +25,7 @@ STATEMENT_04 = "STOP TEXTING ME AND START TEXTING BOB YOU FOOLISH BOY!"
 
 # rails - block 2
 STATEMENT_05 = "What? How DARE YOU?! Who told you -- Dudders close your ears! I don't want you to hear anything about " \
-               "this SCIENCE nonesense. Just go back to watching the Tele... Wait just one moment... Sweetums... What" \
+               "this SCIENCE nonsense. Just go back to watching the Tele... Wait just one moment... Sweetums... What" \
                "are you watching on the Tele?"
 
 STATEMENT_06 = "Oh thank goodness! Dudders you are so brilliant, you know you are learning a lot watching his show." \
@@ -119,10 +119,7 @@ def handle_command(command, channel, milestone_marker):
                 # This is after Harry has heard back from Hogford #
                 ###################################################
                 if response_wit_parsed['intent'] == ['hogford_question'] and milestone_marker == 2:
-                    response = AT_DUDLEY + "What? How DARE YOU?! Who told you -- Dudders close your ears! I don't want " \
-                                           "you to hear anything about this SCIENCE nonesense. Just go back to watching " \
-                                           "the Tele... Wait just one moment... Sweetums... What are you watching on " \
-                                           "the Tele?"
+                    response = AT_DUDLEY + STATEMENT_05
                     time.sleep(READ_DELAY)
                     milestone_marker = 3
 
