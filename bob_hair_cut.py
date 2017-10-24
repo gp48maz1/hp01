@@ -6,17 +6,17 @@ from utils import wit_response, wit_dudley_response
 # starterbot's ID as an environment variable
 BOT_ID_PETUNIA = 'U7JK660E6'
 BOT_ID_DUDLEY = 'U7JL8RLEQ'
-BOT_ID = 'U7HQ4QJR2'
+BOT_ID_BOB_HAIR_CUT = 'U7N6MU4AC'
 BOT_ID_HOGFORD = 'U7NA7RWC9'
 
-SLACK_BOT_TOKEN_HOGFORD = 'xoxb-260347880417-cykm48o6jvV2Zu604TTVTG3h'
+SLACK_BOT_TOKEN = 'xoxb-260225956352-zGKN4Tfw2iQ8Rn97HwROAIY0'
 
 
 
 # constants
 AT_HOGFORD = "<@" + BOT_ID_HOGFORD + ">"
 AT_DUDLEY = "<@" + BOT_ID_DUDLEY + ">"
-AT_HP = "<@" + BOT_ID + ">"
+AT_BOB_HAIR_CUT = "<@" + BOT_ID_BOB_HAIR_CUT + ">"
 AT_PETUNIA = "<@" + BOT_ID_PETUNIA + ">"
 
 # rails
@@ -26,7 +26,6 @@ HELP_COMMAND = "help"
 
 #random
 READ_DELAY = 2
-
 
 def handle_command(command, channel):
     """
@@ -43,9 +42,8 @@ def handle_command(command, channel):
         general_text = command.split(AT_HOGFORD)[1].strip().lower()
 
         if general_text == START_COMMAND:
-            # @DOBY This response should execute once the user has scheduled the haircut
-            # It should be a seemless transition. Once Bob says the haircut is set, the user should receive a message
-            # from Hogford
+            # @DOBY This response should execute once Aunt Petunia finished scolding Harry
+            # I will mark it in her code
             response = "Message from Hogford School of Science & Engineering. INCOMING STUDENT your email account has " \
                        "NOT yet been verified. Please log in and finish regirstration. All INCOMING STUDENTS must " \
                        "finish registration by September 1st. Text HELP for further assitance."
@@ -79,12 +77,12 @@ def parse_slack_output(slack_rtm_output):
 
 
 # instantiate Slack & Twilio clients
-slack_client = SlackClient(SLACK_BOT_TOKEN_HOGFORD)
+slack_client = SlackClient(SLACK_BOT_TOKEN)
 
 if __name__ == "__main__":
     READ_WEBSOCKET_DELAY = 1 # 1 second delay between reading from firehose
     if slack_client.rtm_connect():
-        print("Hogford Bot connected and running!")
+        print("Bob Hair Cut Bot connected and running!")
         while True:
             command, channel = parse_slack_output(slack_client.rtm_read())
             if command and channel:

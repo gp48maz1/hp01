@@ -13,17 +13,25 @@ AT_BOT = "<@" + BOT_ID_PETUNIA + ">"
 AT_DUDLEY = "<@" + BOT_ID_DUDLEY + ">"
 AT_HP = "<@" + BOT_ID + ">"
 
-# rails
+# rails - start
 EXAMPLE_COMMAND = "do"
 START_COMMAND = "bot exec"
 RESPONSE_1 = "mom stop it i'm watching the tele!"
 RESPONSE_2 = "fine... mother... but only because harry is scheduling it!"
 
+# rails - block 1.5
+STATEMENT_04 = "STOP TEXTING ME AND START TEXTING BOB YOU FOOLISH BOY!"
+
+# rails - block 2
+STATEMENT_05 = "What? How DARE YOU?! Who told you -- Dudders close your ears! I don't want you to hear anything about " \
+               "this SCIENCE nonesense. Just go back to watching the Tele... Wait just one moment... Sweetums... What" \
+               "are you watching on the Tele?"
+
 #random
 READ_DELAY = 2
 
 
-def handle_command(command, channel):
+def handle_command(command, channel, milestone_marker):
     """
         Receives commands directed at the bot and determines if they
         are valid commands. If so, then acts on the commands. If not,
@@ -33,10 +41,19 @@ def handle_command(command, channel):
                "when talking to me!"
 
     if command.startswith(AT_BOT):
+
         check = False
         general_text = command.split(AT_BOT)[1].strip().lower()
 
-        #response += START_COMMAND
+        #ENTRY BLOCK OF CODE NO MILSETONE CHECK NEEDED
+
+        # @Doby, I seperated this into Non Wit and Wit section... but I think it needs to be organized better.
+        # @Doby, The flow is a bit odd because I go back and forth. Look at Block 2 for example.
+
+        ##############################################
+        #                  BLOCK 0                   #
+        # This is what the bot intialize says        #
+        ##############################################
         if general_text == START_COMMAND:
             response = AT_DUDLEY + "Dudders when was the last time you received a hair cut?"
             time.sleep(READ_DELAY)
@@ -52,6 +69,26 @@ def handle_command(command, channel):
             response = AT_HP + "Well...Boy, were you listening?! BOY! Didn't you hear my sweetums. Get on with it!"
             time.sleep(READ_DELAY)
             check = True
+            milestone_marker = 1
+
+        #test 1
+        if milestone_marker == 1:
+            response = AT_HP + "Hey hey hey hey!"
+            time.sleep(READ_DELAY)
+
+            if general_text == RESPONSE_2:
+                response = AT_HP + "Well...Boy, were you listening?! BOY! Didn't you hear my sweetums. Get on with it!"
+                time.sleep(READ_DELAY)
+                check = True
+                #milestone_marker = 2
+
+        #test 2
+        if general_text == "test 3" and milestone_marker == 2:
+            response = AT_HP + "Well... looks like we made it to the other side"
+            time.sleep(READ_DELAY)
+            check = True
+            milestone_marker = 3
+
 
         ##########
         # WIT.AI #
@@ -60,8 +97,33 @@ def handle_command(command, channel):
 
             entity, value = wit_petunia_response(command)
 
-            response = "BOO" + entity + " " + value
+            response = "HMMMMMM" + entity + " " + value
 
+            ##############################################
+            #                  BLOCK 1.5                 #
+            # Waiting for user to respond about hair cut #
+            ##############################################
+            if ((entity == 'intent' and value == 'affirmative') or (entity == 'object_of_affirmation')) and milestone_marker == 1:
+                response = STATEMENT_04
+                time.sleep(READ_DELAY)
+                milestone_marker = 2
+                # @Doby once this marker is reached the script for Bob's haircut should start (not yet written)
+                # @Doby, so just skip to the Hogwarts script running
+
+            ###################################################
+            #                  BLOCK 2                        #
+            # This is after Harry has heard back from Hogford #
+            ###################################################
+            if entity == 'intent' and value == 'hogford_question' and milestone_marker == 2:
+                response = STATEMENT_05
+                time.sleep(READ_DELAY)
+                milestone_marker = 3
+
+
+            ##############################################
+            #                  BLOCK X                   #
+            # This Block is to catch RANDOM phrases      #
+            ##############################################
             if entity == 'intent' and value == 'dudley_is_scared':
                 response = "NOT IN THIS HOUSE POTTER!!!"
                 time.sleep(READ_DELAY)
@@ -78,6 +140,7 @@ def handle_command(command, channel):
 
     slack_client_petunia.api_call("chat.postMessage", channel=channel,
                           text=response, as_user=True)
+    return milestone_marker
 
 
 def parse_slack_output(slack_rtm_output):
@@ -102,12 +165,15 @@ slack_client_petunia = SlackClient(os.environ.get('SLACK_BOT_TOKEN_PETUNIA'))
 
 if __name__ == "__main__":
     READ_WEBSOCKET_DELAY = 1 # 1 second delay between reading from firehose
+    ##### Progression tracking #############
+    milestone_marker = 0
+    ########################################
     if slack_client_petunia.rtm_connect():
         print("Aunt Petunia Bot connected and running!")
         while True:
             command, channel = parse_slack_output(slack_client_petunia.rtm_read())
             if command and channel:
-                handle_command(command, channel)
+                milestone_marker = handle_command(command, channel, milestone_marker)
             time.sleep(READ_WEBSOCKET_DELAY)
     else:
         print("Connection failed. Invalid Slack token or bot ID?")
