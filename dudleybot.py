@@ -19,6 +19,12 @@ QUESTION_1 = "dudders when was the last time you received a hair cut?"
 QUESTION_2 = "oh sweetums, i know you don't want to go, but we'll get harry to " \
              "schedule it."
 
+QUESTION_3 = "What? How DARE YOU?! Who told you -- Dudders close your ears! I don't want you to hear anything about " \
+               "this SCIENCE nonesense. Just go back to watching the Tele... Wait just one moment... Sweetums... What" \
+               "are you watching on the Tele?"
+
+STATEMENT_3 = "Mom stop talking I'm watching the Tele, Trump is on! He is firing people on The Apprentice!"
+
 #random
 READ_DELAY = 2
 
@@ -42,6 +48,11 @@ def handle_command(command, channel):
 
         if general_text == QUESTION_2:
             response = AT_PETUNIA + "Fine... Mother... but only because Harry is scheduling it!"
+            time.sleep(READ_DELAY)
+            check = True
+
+        if general_text == QUESTION_3:
+            response = AT_PETUNIA + STATEMENT_3
             time.sleep(READ_DELAY)
             check = True
 

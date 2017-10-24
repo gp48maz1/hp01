@@ -18,6 +18,7 @@ EXAMPLE_COMMAND = "do"
 START_COMMAND = "bot exec"
 RESPONSE_1 = "mom stop it i'm watching the tele!"
 RESPONSE_2 = "fine... mother... but only because harry is scheduling it!"
+RESPONSE_3 = "Mom stop talking I'm watching the Tele, Trump is on! He is firing people on The Apprentice!"
 
 # rails - block 1.5
 STATEMENT_04 = "STOP TEXTING ME AND START TEXTING BOB YOU FOOLISH BOY!"
@@ -26,6 +27,9 @@ STATEMENT_04 = "STOP TEXTING ME AND START TEXTING BOB YOU FOOLISH BOY!"
 STATEMENT_05 = "What? How DARE YOU?! Who told you -- Dudders close your ears! I don't want you to hear anything about " \
                "this SCIENCE nonesense. Just go back to watching the Tele... Wait just one moment... Sweetums... What" \
                "are you watching on the Tele?"
+STATEMENT_06 = "Oh thank goodness! Dudders you are so brilliant, you know you are learning a lot watching his show." \
+               "Trump knows how to be a true leader he is not distracted by this science nonsense... " \
+               "If only he could lead a country one day... "
 
 #random
 READ_DELAY = 2
@@ -71,23 +75,17 @@ def handle_command(command, channel, milestone_marker):
             check = True
             milestone_marker = 1
 
-        #test 1
-        if milestone_marker == 1:
-            response = AT_HP + "Hey hey hey hey!"
-            time.sleep(READ_DELAY)
+        #################################################
+        #                  BLOCK 2                      #
+        # This is the banter between Bots post hair cut #
+        #################################################
+        if milestone_marker == 3:
 
-            if general_text == RESPONSE_2:
-                response = AT_HP + "Well...Boy, were you listening?! BOY! Didn't you hear my sweetums. Get on with it!"
+            if general_text == RESPONSE_3:
+                response = STATEMENT_06
                 time.sleep(READ_DELAY)
                 check = True
-                #milestone_marker = 2
-
-        #test 2
-        if general_text == "test 3" and milestone_marker == 2:
-            response = AT_HP + "Well... looks like we made it to the other side"
-            time.sleep(READ_DELAY)
-            check = True
-            milestone_marker = 3
+                # @Doby this is the end of Chapter 1. The next cut scene will play from here.
 
 
         ##########

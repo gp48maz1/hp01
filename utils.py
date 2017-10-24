@@ -22,6 +22,8 @@ def wit_response(message_text):
     return(entity, value)
 
 
+#I Feel like this can be condensed so I don't have different one for each character
+
 def wit_dudley_response(message_text):
     resp = client_dudley.message(message_text)
     print(resp)
