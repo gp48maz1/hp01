@@ -7,16 +7,21 @@ from utils import wit_response, wit_dudley_response
 BOT_ID_PETUNIA = 'U7JK660E6'
 BOT_ID_DUDLEY = 'U7JL8RLEQ'
 BOT_ID = 'U7HQ4QJR2'
-BOT_HOGFORD = ''
+BOT_ID_HOGFORD = 'U7NA7RWC9'
+
+SLACK_BOT_TOKEN_HOGFORD = 'xoxb-260347880417-cykm48o6jvV2Zu604TTVTG3h'
+
+
 
 # constants
-AT_HOGFORD = "<@" + BOT_HOGFORD + ">"
+AT_HOGFORD = "<@" + BOT_ID_HOGFORD + ">"
 AT_DUDLEY = "<@" + BOT_ID_DUDLEY + ">"
 AT_HP = "<@" + BOT_ID + ">"
 AT_PETUNIA = "<@" + BOT_ID_PETUNIA + ">"
 
 # rails
-START_COMMAND = "dudders when was the last time you received a hair cut?"
+START_COMMAND = "hog exec"
+HELP_COMMAND = "help"
 
 
 #random
@@ -41,13 +46,17 @@ def handle_command(command, channel):
             # It should be a seemless transition. Once Bob says the haircut is set, the user should receive a message
             # from Hogford
             response = "Message from Hogford School of Science & Engineering. INCOMING STUDENT your email account has " \
-                       "not yet been verified. Please log in and finish regirstration. All INCOMING STUDENTS must " \
+                       "NOT yet been verified. Please log in and finish regirstration. All INCOMING STUDENTS must " \
                        "finish registration by September 1st. Text HELP for further assitance."
-
             time.sleep(READ_DELAY)
             check = True
 
-    slack_client_dudley.api_call("chat.postMessage", channel=channel,
+        if general_text == HELP_COMMAND:
+            response = "Touche... You have called the developers bluff. Who really texts HELP back anyway??"
+            time.sleep(READ_DELAY)
+            check = True
+
+        slack_client.api_call("chat.postMessage", channel=channel,
                           text=response, as_user=True)
 
 
@@ -60,7 +69,7 @@ def parse_slack_output(slack_rtm_output):
     output_list = slack_rtm_output
     if output_list and len(output_list) > 0:
         for output in output_list:
-            if output and 'text' in output and AT_BOT in output['text']:
+            if output and 'text' in output and AT_HOGFORD in output['text']:
                 # return text after the @ mention, whitespace removed
                 # return output['text'].split(AT_BOT)[1].strip().lower(),
                 return output['text'], \
@@ -69,14 +78,14 @@ def parse_slack_output(slack_rtm_output):
 
 
 # instantiate Slack & Twilio clients
-slack_client_dudley = SlackClient(os.environ.get('SLACK_BOT_TOKEN_DUDLEY'))
+slack_client = SlackClient(SLACK_BOT_TOKEN_HOGFORD)
 
 if __name__ == "__main__":
     READ_WEBSOCKET_DELAY = 1 # 1 second delay between reading from firehose
-    if slack_client_dudley.rtm_connect():
-        print("Dudley Bot connected and running!")
+    if slack_client.rtm_connect():
+        print("Hogford Bot connected and running!")
         while True:
-            command, channel = parse_slack_output(slack_client_dudley.rtm_read())
+            command, channel = parse_slack_output(slack_client.rtm_read())
             if command and channel:
                 handle_command(command, channel)
             time.sleep(READ_WEBSOCKET_DELAY)
