@@ -18,7 +18,7 @@ EXAMPLE_COMMAND = "do"
 START_COMMAND = "bot exec"
 RESPONSE_1 = "mom stop it i'm watching the tele!"
 RESPONSE_2 = "fine... mother... but only because harry is scheduling it!"
-RESPONSE_3 = "Mom stop talking I'm watching the Tele, Trump is on! He is firing people on The Apprentice!"
+RESPONSE_3 = "mom stop talking i'm watching the tele, trump is on! he is firing people on the apprentice!"
 
 # rails - block 1.5
 STATEMENT_04 = "STOP TEXTING ME AND START TEXTING BOB YOU FOOLISH BOY!"
@@ -27,6 +27,7 @@ STATEMENT_04 = "STOP TEXTING ME AND START TEXTING BOB YOU FOOLISH BOY!"
 STATEMENT_05 = "What? How DARE YOU?! Who told you -- Dudders close your ears! I don't want you to hear anything about " \
                "this SCIENCE nonesense. Just go back to watching the Tele... Wait just one moment... Sweetums... What" \
                "are you watching on the Tele?"
+
 STATEMENT_06 = "Oh thank goodness! Dudders you are so brilliant, you know you are learning a lot watching his show." \
                "Trump knows how to be a true leader he is not distracted by this science nonsense... " \
                "If only he could lead a country one day... "
@@ -93,48 +94,57 @@ def handle_command(command, channel, milestone_marker):
         ##########
         if not check:
 
-            entity, value = wit_petunia_response(command)
+            response_wit_parsed = wit_petunia_response(command)
 
-            response = "HMMMMMM" + entity + " " + value
+            response = "Made it this far"
 
-            ##############################################
-            #                  BLOCK 1.5                 #
-            # Waiting for user to respond about hair cut #
-            ##############################################
-            if ((entity == 'intent' and value == 'affirmative') or (entity == 'object_of_affirmation')) and milestone_marker == 1:
-                response = STATEMENT_04
-                time.sleep(READ_DELAY)
-                milestone_marker = 2
-                # @Doby once this marker is reached the script for Bob's haircut should start (not yet written)
-                # @Doby, so just skip to the Hogwarts script running
+            print(response_wit_parsed)
 
-            ###################################################
-            #                  BLOCK 2                        #
-            # This is after Harry has heard back from Hogford #
-            ###################################################
-            if entity == 'intent' and value == 'hogford_question' and milestone_marker == 2:
-                response = STATEMENT_05
-                time.sleep(READ_DELAY)
-                milestone_marker = 3
+            #First checking to see if Wit picked up an intent
+            if 'intent' in response_wit_parsed:
+                ##############################################
+                #                  BLOCK 1.5                 #
+                # Waiting for user to respond about hair cut #
+                ##############################################
+                print(milestone_marker)
+                if response_wit_parsed['intent'] == ['affirmative'] and milestone_marker == 1:
+                    response = STATEMENT_04
+                    time.sleep(READ_DELAY)
+                    milestone_marker = 2
+                    # @Doby once this marker is reached the script for Bob's haircut should start (not yet written)
+                    # @Doby, so just skip to the Hogwarts script running
 
+                ###################################################
+                #                  BLOCK 2                        #
+                # This is after Harry has heard back from Hogford #
+                ###################################################
+                if response_wit_parsed['intent'] == ['hogford_question'] and milestone_marker == 2:
+                    response = AT_DUDLEY + "What? How DARE YOU?! Who told you -- Dudders close your ears! I don't want " \
+                                           "you to hear anything about this SCIENCE nonesense. Just go back to watching " \
+                                           "the Tele... Wait just one moment... Sweetums... What are you watching on " \
+                                           "the Tele?"
+                    time.sleep(READ_DELAY)
+                    milestone_marker = 3
 
-            ##############################################
-            #                  BLOCK X                   #
-            # This Block is to catch RANDOM phrases      #
-            ##############################################
-            if entity == 'intent' and value == 'dudley_is_scared':
-                response = "NOT IN THIS HOUSE POTTER!!!"
-                time.sleep(READ_DELAY)
-            elif entity == 'object_of_fear':
-                response = "Did you say {}?! Not in this household POTTER!".format(str(value))
-                time.sleep(READ_DELAY)
-            elif entity == 'object_of_protection':
-                response = "Don't worry Dudders {} is here. POTTER! GET OUT NOW!".format(str(value))
-                time.sleep(READ_DELAY)
+                ##############################################
+                #                  BLOCK X                   #
+                # This Block is to catch RANDOM phrases      #
+                ##############################################
+                if response_wit_parsed['intent'] == ['dudley_is_scared']:
+                    response = "NOT IN THIS HOUSE POTTER!!!"
+                    time.sleep(READ_DELAY)
+                    if 'object_of_fear' in response_wit_parsed:
+                        response = "Did you say {}?! Not in this household POTTER!".format(str(response_wit_parsed['object_of_fear'][0]))
+                        time.sleep(READ_DELAY)
+                    if 'object_of_protection' in response_wit_parsed:
+                        response = "Don't worry Dudders {} is here. POTTER! GET OUT NOW!".format(str(response_wit_parsed['object_of_protection'][0]))
+                        time.sleep(READ_DELAY)
 
-            if entity is None:
+            else:
                 response = "Harry go to CUPBOARD UNDER THE STAIRS NOW!!!"
                 time.sleep(READ_DELAY)
+
+
 
     slack_client_petunia.api_call("chat.postMessage", channel=channel,
                           text=response, as_user=True)
