@@ -1,7 +1,9 @@
 import os
 import time
-from slackclient import SlackClient
+from procComm import *
+from botMap import *
 from utils import wit_response, wit_dudley_response
+
 
 # starterbot's ID as an environment variable
 BOT_ID_PETUNIA = 'U7JK660E6'
@@ -37,9 +39,9 @@ def handle_command(command, channel):
                " my programming is very, very lazy."
 
     ##### NEEED TO FIX THE TRUE FALSE TAGS BAD STRUCTURE###
-    if command.startswith(AT_HOGFORD):
+    if command.startswith(AT_BOB_HAIR_CUT):
         check = False
-        general_text = command.split(AT_HOGFORD)[1].strip().lower()
+        general_text = command.split(AT_BOB_HAIR_CUT)[1].strip().lower()
 
         if general_text == START_COMMAND:
             # @DOBY This response should execute once Aunt Petunia finished scolding Harry
@@ -55,8 +57,8 @@ def handle_command(command, channel):
             time.sleep(READ_DELAY)
             check = True
 
-        slack_client.api_call("chat.postMessage", channel=channel,
-                          text=response, as_user=True)
+        slack_client.procMsgSend(channel=channel,text=response,dataType=slack_client.IS_DATA)
+
 
 
 def parse_slack_output(slack_rtm_output):
@@ -68,7 +70,7 @@ def parse_slack_output(slack_rtm_output):
     output_list = slack_rtm_output
     if output_list and len(output_list) > 0:
         for output in output_list:
-            if output and 'text' in output and AT_HOGFORD in output['text']:
+            if output and 'text' in output and AT_BOB_HAIR_CUT in output['text']:
                 # return text after the @ mention, whitespace removed
                 # return output['text'].split(AT_BOT)[1].strip().lower(),
                 return output['text'], \
@@ -77,14 +79,14 @@ def parse_slack_output(slack_rtm_output):
 
 
 # instantiate Slack & Twilio clients
-slack_client = SlackClient(SLACK_BOT_TOKEN)
+slack_client = procMsgInit(os.environ.get('SLACK_BOT_TOKEN_BOB'),IS_BOB_PORT)
 
 if __name__ == "__main__":
     READ_WEBSOCKET_DELAY = 1 # 1 second delay between reading from firehose
-    if slack_client.rtm_connect():
+    if slack_client.procMsgConn():
         print("Bob Hair Cut Bot connected and running!")
         while True:
-            command, channel = parse_slack_output(slack_client.rtm_read())
+            command, channel = parse_slack_output(slack_client.procMsgRecv())
             if command and channel:
                 handle_command(command, channel)
             time.sleep(READ_WEBSOCKET_DELAY)

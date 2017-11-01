@@ -1,6 +1,7 @@
 import os
 import time
-from slackclient import SlackClient
+from procComm import *
+from botMap import *
 from utils import wit_response, wit_dudley_response
 
 # starterbot's ID as an environment variable
@@ -57,8 +58,8 @@ def handle_command(command, channel):
             time.sleep(READ_DELAY)
             check = True
 
-        slack_client.api_call("chat.postMessage", channel=channel,
-                          text=response, as_user=True)
+        slack_client.procMsgSend(channel=channel,text=response,dataType=slack_client.IS_DATA)
+
 
 
 def parse_slack_output(slack_rtm_output):
@@ -79,14 +80,14 @@ def parse_slack_output(slack_rtm_output):
 
 
 # instantiate Slack & Twilio clients
-slack_client = SlackClient(SLACK_BOT_TOKEN_HOGFORD)
+slack_client = procMsgInit(os.environ.get('SLACK_BOT_TOKEN_HOGFORD'),IS_HOGFORD_PORT)
 
 if __name__ == "__main__":
     READ_WEBSOCKET_DELAY = 1 # 1 second delay between reading from firehose
-    if slack_client.rtm_connect():
+    if slack_client.procMsgConn():
         print("Hogford Bot connected and running!")
         while True:
-            command, channel = parse_slack_output(slack_client.rtm_read())
+            command, channel = parse_slack_output(slack_client.procMsgRecv())
             if command and channel:
                 handle_command(command, channel)
             time.sleep(READ_WEBSOCKET_DELAY)
