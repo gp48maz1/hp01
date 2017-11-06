@@ -1,6 +1,7 @@
 import os
 from slackclient import SlackClient
 from slackclient import SlackClient
+from slackclient import SlackClient
 
 
 BOT_NAME = 'hagrid'
