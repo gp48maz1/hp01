@@ -1,6 +1,6 @@
 import os
 import time
-from utils import wit_response, wit_hagrid_response
+from utils import wit_response, wit_ollivander_response
 from procComm import *
 from botMap import *
 from chapter_02_script import *
@@ -17,30 +17,62 @@ def handle_command(command, channel, milestone_marker):
         are valid commands. If so, then acts on the commands. If not,
         returns back what it needs for clarification.
     """
-    response = "Hello Gary, gurd to see ya"
+    response = "Well if it is not Mr. Potter"
 
-    if command.startswith(AT_HAGRID):
+    if command.startswith(AT_OLLIVANDER):
 
         check = False
-        general_text = command.split(AT_HAGRID)[1].strip().lower()
+        general_text = command.split(AT_OLLIVANDER)[1].strip().lower()
 
-        #ENTRY BLOCK OF CODE NO MILSETONE CHECK NEEDED
+        ##########################################################################
+        #                                                                        #
+        #  BLOCKS NEED TO BE IN REVERSE ORDER SO MILESTONES DON'T GET OVERRIDEN  #
+        #                                                                        #
+        ##########################################################################
 
-        # @Doby, I seperated this into Non Wit and Wit section... but I think it needs to be organized better.
-        # @Doby, The flow is a bit odd because I go back and forth. Look at Block 2 for example.
+        ##############################################
+        #                  BLOCK 3                   #
+        # This is what the bot intialize says        #
+        ##############################################
+        if general_text == "p3":
+            response = CH02_ollivander_REPLY_03
+            time.sleep(READ_DELAY)
+            check = True
+            milestone_marker = 3
+
+        ##############################################
+        #                  BLOCK 2                   #
+        # This is what the bot intialize says        #
+        ##############################################
+        if general_text == "p2":
+            response = CH02_ollivander_REPLY_02
+            time.sleep(READ_DELAY)
+            check = True
+            milestone_marker = 2
+
+        ##############################################
+        #                  BLOCK 1                   #
+        # First spell attempted                      #
+        ##############################################
+        if general_text == "p1":
+            response = CH02_ollivander_REPLY_01
+            time.sleep(READ_DELAY)
+            check = True
+            milestone_marker = 1
+
+
 
         ##############################################
         #                  BLOCK 0                   #
         # This is what the bot intialize says        #
         ##############################################
-        if general_text == START_COMMAND:
-            response = CH02_hagrid_STATEMENT_01
+        if general_text == START_COMMAND_OLLIVANDER:
+            response = CH02_ollivander_STATEMENT_01
             time.sleep(READ_DELAY)
             check = True
             milestone_marker = 0
 
         '''''
-
         #################################################
         #                  BLOCK 2                      #
         # This is the banter between Bots post hair cut #
@@ -60,12 +92,14 @@ def handle_command(command, channel, milestone_marker):
         ##########
         if not check:
 
-            response_wit_parsed = wit_hagrid_response(general_text)
+            response_wit_parsed = wit_ollivander_response(general_text)
 
-            response = "Well err, what ya want to know? Just say yes if you want to keep going"
+            response = "Well someone should really train the Wit bot"
 
             print(response_wit_parsed)
 
+
+            '''''
             #First checking to see if Wit picked up an intent
             if 'intent' in response_wit_parsed:
                 ##########################################################################
@@ -79,11 +113,11 @@ def handle_command(command, channel, milestone_marker):
                 # Getting to Woz                                  #
                 ###################################################
                 if response_wit_parsed['intent'] == ['affirmative'] and milestone_marker == 2:
-                    response = CH02_hagrid_REPLY_03_Positive
+                    response = CH02_ollivander_REPLY_03_Positive
                     time.sleep(READ_DELAY)
 
                 if response_wit_parsed['intent'] == ['question_wozniak'] and milestone_marker == 2:
-                    response = CH02_hagrid_REPLY_03_Woz
+                    response = CH02_ollivander_REPLY_03_Woz
                     time.sleep(READ_DELAY)
                     milestone_marker = 3
 
@@ -94,12 +128,12 @@ def handle_command(command, channel, milestone_marker):
                 # Either telling more or skipping to Gringots     #
                 ###################################################
                 if response_wit_parsed['intent'] == ['affirmative'] and milestone_marker == 1:
-                    response = CH02_hagrid_REPLY_02_Positive
+                    response = CH02_ollivander_REPLY_02_Positive
                     time.sleep(READ_DELAY)
                     milestone_marker = 2
 
                 elif response_wit_parsed['intent'] == ['negative'] and milestone_marker == 1:
-                    response = CH02_hagrid_REPLY_02_Negative
+                    response = CH02_ollivander_REPLY_02_Negative
                     time.sleep(READ_DELAY)
                     milestone_marker = 2
 
@@ -109,13 +143,13 @@ def handle_command(command, channel, milestone_marker):
                 ##############################################
                 print(milestone_marker)
                 if response_wit_parsed['intent'] == ['affirmative'] and milestone_marker == 0:
-                    response = CH02_hagrid_REPLY_01_Postive
+                    response = CH02_ollivander_REPLY_01_Postive
                     time.sleep(READ_DELAY)
                     milestone_marker = 1
 
 
                 elif response_wit_parsed['intent'] == ['negative'] and milestone_marker == 0:
-                    response = CH02_hagrid_REPLY_01_Negative
+                    response = CH02_ollivander_REPLY_01_Negative
                     time.sleep(READ_DELAY)
                     milestone_marker = 1
 
@@ -131,8 +165,10 @@ def handle_command(command, channel, milestone_marker):
             else:
                 response = "Hhmmmm seems like I didn' quite make that out ther'..."
                 time.sleep(READ_DELAY)
+            '''
 
-    slack_client_hagrid.procMsgSend(channel=channel,text=response,dataType=slack_client_hagrid.IS_DATA)
+
+    slack_client_ollivander.procMsgSend(channel=channel, text=response, dataType=slack_client_ollivander.IS_DATA)
     return milestone_marker
 
 
@@ -145,7 +181,7 @@ def parse_slack_output(slack_rtm_output):
     output_list = slack_rtm_output
     if output_list and len(output_list) > 0:
         for output in output_list:
-            if output and 'text' in output and AT_HAGRID in output['text']:
+            if output and 'text' in output and AT_OLLIVANDER in output['text']:
                 # return text after the @ mention, whitespace removed
                 # return output['text'].split(AT_BOT)[1].strip().lower(),
                 return output['text'], \
@@ -154,17 +190,17 @@ def parse_slack_output(slack_rtm_output):
 
 
 # instantiate Slack & Twilio clients
-slack_client_hagrid = procMsgInit(os.environ.get('SLACK_BOT_TOKEN_HAGRID'),IS_HAGRID_PORT)
+slack_client_ollivander = procMsgInit(os.environ.get('SLACK_BOT_TOKEN_OLLIVANDER'),IS_OLLIVANDER_PORT)
 
 if __name__ == "__main__":
     READ_WEBSOCKET_DELAY = 1 # 1 second delay between reading from firehose
     ##### Progression tracking #############
     milestone_marker = 0
     ########################################
-    if slack_client_hagrid.procMsgConn():
-        print("Hagrid Bot connected and running!")
+    if slack_client_ollivander.procMsgConn():
+        print("Ollivander Bot connected and running!")
         while True:
-            command, channel = parse_slack_output(slack_client_hagrid.procMsgRecv())
+            command, channel = parse_slack_output(slack_client_ollivander.procMsgRecv())
             if command and channel:
                 milestone_marker = handle_command(command, channel, milestone_marker)
             time.sleep(READ_WEBSOCKET_DELAY)
