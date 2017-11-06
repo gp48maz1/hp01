@@ -1,6 +1,6 @@
 import os
 import time
-from utils import wit_response, wit_petunia_response
+from utils import wit_response, wit_hagrid_response
 from procComm import *
 from botMap import *
 from chapter_02_script import *
@@ -65,12 +65,13 @@ def handle_command(command, channel, milestone_marker):
                 # @Doby this is the end of Chapter 1. The next cut scene will play from here.
 
 
+        '''
         ##########
         # WIT.AI #
         ##########
         if not check:
 
-            response_wit_parsed = wit_petunia_response(command)
+            response_wit_parsed = wit_hagrid_response(general_text)
 
             response = "Made it this far"
 
@@ -78,46 +79,70 @@ def handle_command(command, channel, milestone_marker):
 
             #First checking to see if Wit picked up an intent
             if 'intent' in response_wit_parsed:
-                ##############################################
-                #                  BLOCK 1.5                 #
-                # Waiting for user to respond about hair cut #
-                ##############################################
-                print(milestone_marker)
-                if response_wit_parsed['intent'] == ['affirmative'] and milestone_marker == 1:
-                    response = STATEMENT_04
+                ##########################################################################
+                #                                                                        #
+                #  BLOCKS NEED TO BE IN REVERSE ORDER SO MILESTONES DON'T GET OVERRIDEN  #
+                #                                                                        #
+                ##########################################################################
+
+                ###################################################
+                #                  BLOCK 3                        #
+                # Getting to Woz                                  #
+                ###################################################
+                if response_wit_parsed['intent'] == ['affirmative'] and milestone_marker == 2:
+                    response = CH02_hagrid_REPLY_03_Positive
                     time.sleep(READ_DELAY)
-                    milestone_marker = 2
-                    # @Doby once this marker is reached the script for Bob's haircut should start (not yet written)
-                    # @Doby, so just skip to the Hogwarts script running
+
+                if response_wit_parsed['intent'] == ['question_wozniak'] and milestone_marker == 2:
+                    response = CH02_hagrid_REPLY_03_Woz
+                    time.sleep(READ_DELAY)
+                    milestone_marker = 3
+
+                ## NEED TO HANDLE IF THEY SAY NO?
 
                 ###################################################
                 #                  BLOCK 2                        #
-                # This is after Harry has heard back from Hogford #
+                # Either telling more or skipping to Gringots     #
                 ###################################################
-                if response_wit_parsed['intent'] == ['hogford_question'] and milestone_marker == 2:
-                    response = AT_DUDLEY + STATEMENT_05
+                if response_wit_parsed['intent'] == ['affirmative'] and milestone_marker == 1:
+                    response = CH02_hagrid_REPLY_02_Positive
                     time.sleep(READ_DELAY)
-                    milestone_marker = 3
+                    milestone_marker = 2
+
+                elif response_wit_parsed['intent'] == ['negative'] and milestone_marker == 1:
+                    response = CH02_hagrid_REPLY_02_Negative
+                    time.sleep(READ_DELAY)
+                    milestone_marker = 2
+
+                ##############################################
+                #                  BLOCK 1                   #
+                # Telling User about the basics              #
+                ##############################################
+                print(milestone_marker)
+                if response_wit_parsed['intent'] == ['affirmative'] and milestone_marker == 0:
+                    response = CH02_hagrid_REPLY_01_Postive
+                    time.sleep(READ_DELAY)
+                    milestone_marker = 1
+
+
+                elif response_wit_parsed['intent'] == ['negative'] and milestone_marker == 0:
+                    response = CH02_hagrid_REPLY_01_Negative
+                    time.sleep(READ_DELAY)
+                    milestone_marker = 1
 
                 ##############################################
                 #                  BLOCK X                   #
                 # This Block is to catch RANDOM phrases      #
                 ##############################################
-                if response_wit_parsed['intent'] == ['dudley_is_scared']:
-                    response = "NOT IN THIS HOUSE POTTER!!!"
-                    time.sleep(READ_DELAY)
-                    if 'object_of_fear' in response_wit_parsed:
-                        response = "Did you say {}?! Not in this household POTTER!".format(str(response_wit_parsed['object_of_fear'][0]))
-                        time.sleep(READ_DELAY)
-                    if 'object_of_protection' in response_wit_parsed:
-                        response = "Don't worry Dudders {} is here. POTTER! GET OUT NOW!".format(str(response_wit_parsed['object_of_protection'][0]))
+                if 'wit/greetings' in response_wit_parsed:
+                    if response_wit_parsed['wit/greetings'] == ['true']:
+                        response = "HAHAHA hello ther' Mr. Potter!"
                         time.sleep(READ_DELAY)
 
             else:
-                response = "Harry go to CUPBOARD UNDER THE STAIRS NOW!!!"
+                response = "Hhmmmm seems like I didn' quite make that out ther'..."
                 time.sleep(READ_DELAY)
 
-    '''
     slack_client_hagrid.procMsgSend(channel=channel,text=response,dataType=slack_client_hagrid.IS_DATA)
     return milestone_marker
 
