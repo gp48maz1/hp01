@@ -159,7 +159,6 @@ def handle_command(command, channel, milestone_marker):
                 time.sleep(READ_DELAY)
 
     slack_client_petunia.procMsgSend(channel=channel,text=response,dataType=slack_client_petunia.IS_DATA)
-    return milestone_marker
 
 
 def parse_slack_output(slack_rtm_output):
@@ -189,7 +188,7 @@ if __name__ == "__main__":
         while True:
             command, channel = parse_slack_output(slack_client_petunia.procMsgRecv())
             if command and channel:
-                handle_command(command, channel)
+                handle_command(command, channel,milestone_marker)
             time.sleep(READ_WEBSOCKET_DELAY)
     else:
         print("Connection failed. Invalid Slack token or bot ID?")
