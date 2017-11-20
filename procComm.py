@@ -14,7 +14,7 @@ IS_SLACK= True
 #port = 50000                # Reserve a port for your service.
 #SocketServer server
 class procComm:
-    HOST = socket.gethostbyname(socket.gethostname())
+    HOST = 0; #ocket.gethostbyname(socket.gethostname())
     port = 0
     server = 0
     IS_DATA = 0

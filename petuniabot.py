@@ -47,8 +47,12 @@ def send_hint():
     # Each time users request hint, it will send back the hint to current milestone. 
     #
     hint_set = {
-        0:['You jump, I jump. Remember?','Wait to Die,Wait to Live','Make Each day Count'],
-        1:['May the force be with you','Help me, Obi-Wan Kenobi. You are my only hope','I find your lack of faith disturbing.']
+        1:['You should probably respond to Aunt Petunia','You should probably tell Petunia you are going to do it',
+           'Type: YES'],
+        2:['You should probably ask Aunt Petunia about the text','Ask Aunt Petunia',
+           'Type: @AuntPetunia What is this letter from Hogford about?'],
+        3: ['Feel free to insult Dudley', 'Feel free to attack Dudley with Magic',
+            'You can also threaten Dudley with Magic']
     }
     return hint_set[milestone_marker]
 
